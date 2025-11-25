@@ -39,6 +39,9 @@ dependencies {
     // H2 Database
     runtimeOnly 'com.h2database:h2'
 
+    // Instant 직렬화
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

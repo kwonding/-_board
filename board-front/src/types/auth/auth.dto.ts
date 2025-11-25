@@ -22,3 +22,9 @@ export interface SignupRequest {
   email: string;
   // gender 등 추가 가능
 }
+
+export interface PasswordResetRequestDto {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}

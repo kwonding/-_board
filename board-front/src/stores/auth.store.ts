@@ -32,7 +32,7 @@ export const useAuthStore = create(
       isInitialized: false,
 
       setAccessToken: (token) => set({accessToken: token}),
-      setUser: (user) => set({user}), // key와 value값이 같음
+      setUser: (user) => set({user}), // key와 value값이 같음 - user: user
       clearAuth: () => set({accessToken: null, user: null}),
 
       // persist 초기화 완료 여부 플래그 설정
@@ -47,7 +47,10 @@ export const useAuthStore = create(
     // - 키 이름: AUTH_STORAGE(auth-storage)
     {
       name: AUTH_STORAGE, // 로컬 스토리지 키
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => (state) => { 
+        // 첫번째 () - 스토어 정의 시 호출 / 두번째 (state) - 복원된 상태 전달됨
+        // 즉, () => { return (state) => {if (state) state.isInitialized = true;}} 와 같다
+
         // persist가 localStorage 값 복원 완료 후 실행
         if (state) {
           state.isInitialized = true;

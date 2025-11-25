@@ -86,7 +86,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      * */
     @Transactional
     protected User upsertUser(AuthProvider provider, OAuth2UserInfo userInfo) {
-        // 소셜 서비으세서 제공하는 고유 사용자 ID (구글 sub, 카카오 id 등)
+        // 소셜 서비스에서 제공하는 고유 사용자 ID (구글 sub, 카카오 id 등)
         String providerId = userInfo.getId();
 
         // 소셜에서 가져온 데이터 저장

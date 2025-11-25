@@ -18,7 +18,7 @@ public class UserPrincipalMapper {
     /** === JWT Filter에서 username만 가지고 principal 생성용 === */
     public UserPrincipal toPrincipal(@NonNull String username) {
 
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findWithRolesUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
 
         return map(user);
@@ -30,7 +30,7 @@ public class UserPrincipalMapper {
         List<SimpleGrantedAuthority> authorities =
                 (user.getUserRoles() == null || user.getUserRoles().isEmpty())
                         ? List.of(new SimpleGrantedAuthority("ROLE_USER"))
-                        : user.getUserRoles().stream()
+                        : user.getUserRoles().stream() // Lazy 로딩 발생
                         .map(role -> {
                             String r = role.getRole().getName().name();
                             String name = r.startsWith("ROLE_") ? r : "ROLE_" + r;
