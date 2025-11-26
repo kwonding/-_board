@@ -3,6 +3,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { MeResponse } from "@/types/user/user.dto";
 
+/*
+  Zustand 상태 변경 규칙
+  : set({key:value})  - 해당 key만 업데이트
+                      - 다른 상태(key)는 그대로 유지(부분 업데이트 가능)
+ */
+
 // ==== 상태 관리 데이터 ==== //
 type AuthState = {
   accessToken: string | null;
@@ -45,6 +51,7 @@ export const useAuthStore = create(
     //! persist 옵션
     // : 모든 localStorage 작업을 자동 처리
     // - 키 이름: AUTH_STORAGE(auth-storage)
+    /* Zustand 상태를 브라우저에 저장(localStorage 등)해서 페이지를 새로고침해도 상태가 유지되도록 하는 기능 */
     {
       name: AUTH_STORAGE, // 로컬 스토리지 키
       onRehydrateStorage: () => (state) => { 

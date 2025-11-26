@@ -14,13 +14,17 @@ export interface LoginResponse {
   accessTokenExpiresInMillis: number;
 }
 
+type Gender = "M" | "F" | "N";
+
 // 회원가입 요청
 export interface SignupRequest {
   username: string;
   password: string;
+  confirmPassword: string;
   nickname: string;
-  email: string;
-  // gender 등 추가 가능
+  email: string; 
+  gender: Gender;
+  provider: string;
 }
 
 export interface PasswordResetRequestDto {

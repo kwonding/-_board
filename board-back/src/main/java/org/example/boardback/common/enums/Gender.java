@@ -9,7 +9,7 @@ public enum Gender {
     MALE("M", "남성"),
     FEMALE("F", "여성"),
     OTHER("O", "기타"),
-    UNKNOWN("U", "미지정");
+    NONE("N", "미지정");
 
     private final String code;
     private final String description;
@@ -25,13 +25,13 @@ public enum Gender {
      */
     @JsonCreator
     public static Gender fromCode(String code) {
-        if (code == null) return UNKNOWN;
+        if (code == null) return NONE;
 
         for (Gender g : values()) {
             if (g.code.equalsIgnoreCase(code)) {
                 return g;
             }
         }
-        return UNKNOWN;
+        return NONE;
     }
 }

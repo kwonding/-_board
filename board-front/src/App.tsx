@@ -1,37 +1,44 @@
-import { Link, Route, Routes } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
+import { useEffect } from "react";
 import { useAuthStore } from "./stores/auth.store";
-import RegisterPage from "./pages/RegisterPage";
-import OAuth2CallbackPage from "./pages/OAuth2CallbackPage";
+import { userApi } from "./apis/user/user.api";
+import { GlobalStyle } from "./styles/global";
+import Layout from "./components/layout/Layout";
+import AuthRouter from "./pages/auth/AuthRouter";
+import MainRouter from "./pages/MainRouter";
 
 export default function App() {
-  const { isInitialized, accessToken, user } = useAuthStore();
+  const { isInitialized, accessToken, user, setUser } = useAuthStore();
 
-  if (!isInitialized) return <div>Loading...</div>;
+  useEffect(() => {
+    if (!isInitialized) return;
+    if (!accessToken) return;
+    if (user) return;
+
+    (async () => {
+      if (accessToken && !user) {
+        const me = await userApi.me();
+        if (me.success && me.data) {
+          setUser(me.data);
+        }
+      }
+    })();
+  }, [isInitialized, accessToken]);
+
+  if (!isInitialized) {
+    return <div>로딩중</div>;
+  }
 
   const isLoggedIn = Boolean(accessToken && user);
 
   return (
     <>
+      <GlobalStyle />
       {isLoggedIn ? (
-        <>
-          로그인이 된 경우
-        </>
-        // <MainRouter />  // 로그인이 된 경우
+        <Layout>
+          <MainRouter /> /* 얘가 Layout의 매개변수로 받는 Children */
+        </Layout>
       ) : (
-        // <AuthRouter />  // 로그인 필요
-        <>
-          로그인 필요
-          <Link to="/login">로그인</Link>
-          <Routes>
-            <Route path="/login" element={<LoginPage />}/>
-            <Route path="/register" element={<RegisterPage />}/>
-
-            {/* OAuth2 소셜 로그인 콜백 */}
-            <Route path="/oauth2/callback" element={<OAuth2CallbackPage />}/>
-          </Routes>
-          
-        </>
+        <AuthRouter />
       )}
     </>
   );

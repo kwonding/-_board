@@ -1,30 +1,32 @@
 package org.example.boardback.service.user.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.example.boardback.common.enums.ErrorCode;
 import org.example.boardback.dto.ResponseDto;
 import org.example.boardback.dto.user.request.UserProfileUpdateRequest;
 import org.example.boardback.dto.user.response.MeResponseDto;
 import org.example.boardback.dto.user.response.UserResponseDto;
+import org.example.boardback.entity.user.Role;
 import org.example.boardback.entity.user.User;
 import org.example.boardback.exception.BusinessException;
 import org.example.boardback.repository.user.UserRepository;
 import org.example.boardback.service.user.UserService;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
+    @Transactional(readOnly = true)
     public ResponseDto<MeResponseDto> getMe(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new BusinessException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         MeResponseDto dto = MeResponseDto.builder()
                 .id(user.getId())
@@ -34,7 +36,8 @@ public class UserServiceImpl implements UserService {
                         .map(role -> role.getRole().getName()).collect(Collectors.toSet()))
                 .provider(user.getProviderId())
                 .build();
-        return null;
+
+        return ResponseDto.success(dto);
     }
 
     @Override
