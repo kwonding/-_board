@@ -14,7 +14,7 @@ import org.example.boardback.repository.board.BoardRepository;
 import org.example.boardback.repository.file.BoardFileRepository;
 import org.example.boardback.repository.file.FileInfoRepository;
 import org.example.boardback.service.board.BoardFileService;
-import org.example.boardback.service.impl.FileServiceImpl;
+import org.example.boardback.service.file.FileServiceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
